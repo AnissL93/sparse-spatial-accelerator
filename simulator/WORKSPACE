@@ -1,0 +1,51 @@
+workspace(name = "sparse")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+
+# Group the sources of the library so that CMake rule have access to it
+all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
+
+# Rule repository
+http_archive(
+    name = "rules_foreign_cc",
+    strip_prefix = "rules_foreign_cc-main",
+    url = "https://github.com/bazelbuild/rules_foreign_cc/archive/master.zip",
+)
+
+load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+
+# Workspace initialization function; includes repositories needed by rules_foreign_cc,
+# and creates some utilities for the host operating system
+rules_foreign_cc_dependencies()
+
+# OpenBLAS source code repository
+http_archive(
+    name = "openblas",
+    build_file_content = all_content,
+    strip_prefix = "OpenBLAS-0.3.2",
+    urls = ["https://github.com/xianyi/OpenBLAS/archive/v0.3.2.tar.gz"],
+)
+
+# Eigen source code repository
+http_archive(
+    name = "eigen",
+    build_file_content = all_content,
+    strip_prefix = "eigen-git-mirror-3.3.5",
+    urls = ["https://github.com/eigenteam/eigen-git-mirror/archive/3.3.5.tar.gz"],
+)
+
+new_git_repository(
+    name = "taco",
+    branch = "master",
+    build_file_content = all_content,
+    init_submodules = True,
+    recursive_init_submodules = True,
+    remote = "https://github.com/tensor-compiler/taco/",
+)
+
+http_archive(
+    name = "com_google_googletest",
+    strip_prefix = "googletest-5ab508a01f9eb089207ee87fd547d290da39d015",
+    urls = ["https://github.com/google/googletest/archive/5ab508a01f9eb089207ee87fd547d290da39d015.zip"],
+)
