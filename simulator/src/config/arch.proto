@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package arch; // Requried to generate valid code.
+
+// Well known protos should be imported with full path relative to
+// @com_google_protobuf.
+import "google/protobuf/any.proto";
+
+enum MemoryType {
+   DDR = 0;
+   SRAM = 1;
+   RF = 2;
+}
+
+message Memory {
+  string name = 1;
+  MemoryType type = 2;
+  int32 size = 3;
+  int32 latency = 4;
+  int32 bandwidth = 5;
+  int32 datawidth = 6;
+}
+
+message PE {
+  int32 vec_lane = 1;
+  Memory mem = 2;
+}
+
+message PECluster {
+  repeated PE pes = 1;
+  Memory mem = 2;
+}
+
+message Arch {
+  repeated PECluster pe_clusters = 1;
+  Memory mem = 2;
+  int32 x = 3;
+  int32 y = 4;
+}

@@ -1,18 +1,35 @@
 
 #include "src/pe.h"
-#include "src/chip.h"
+#include "src/memory.h"
 #include <vector>
 
 namespace simu {
 
-struct Chip::Content {
-  std::vector<PE> pe_;
-  DRAM dram;
+struct PE::Content {
+  arch::PE config;
+  Memory register_file;
 };
 
-Chip::Chip(size_t num_pe, size_t dram_size) {
+PE::PE(arch::PE pe) {
   content = std::make_shared<Content>();
-  content->dram = DRAM(dram_size, 32);
+  content->config = pe;
+  content->register_file = Memory(pe.mem());
 }
+
+struct PECluster::Content {
+  arch::PECluster config;
+  std::vector<PE> pes;
+  Memory sram;
+};
+
+PECluster::PECluster(arch::PECluster pe) {
+  content = std::make_shared<Content>();
+  content->config = pe;
+  content->sram = Memory(pe.mem());
+  for (int i = 0; i < pe.pes_size(); ++i) {
+    content->pes.emplace_back(pe.pes(i));
+  }
+}
+
 
 }  // namespace simu

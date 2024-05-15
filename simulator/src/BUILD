@@ -1,11 +1,13 @@
 cc_library(
     name = "core",
-    srcs = [
-        "memory.cc",
-        "memory.h",
-        "pe.cc",
-        "pe.h",
-        "tensor.cc",
-        "tensor.h",
+    srcs = glob([
+        "*.cc",
+        "*.h",
+    ]),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:taco",
+        "//src/config:arch_config",
+        "//src/config:event",
     ],
 )

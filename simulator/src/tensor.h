@@ -10,33 +10,15 @@
 #include <cstdlib>
 #include <numeric>
 #include <vector>
+#include "taco/tensor.h"
 
-class Shape {
-public:
-  Shape(const std::vector<int64_t> &dims) : dims_(dims) {}
+namespace simu {
 
-  int rank() const { return dims_.size(); }
+taco::Tensor<double> slice(taco::Tensor<double> x,
+                           const std::vector<int> & st,
+                           const std::vector<int>& size);
 
-  int64_t dim(int i) const { return dims_.at(i); }
-
-  int64_t size() const {
-    return std::accumulate(dims_.begin(), dims_.end(), 0);
-  }
-
-private:
-  std::vector<int64_t> dims_;
-};
-
-enum class Device { kGPU, kCPU };
-
-template <typename T> class Tensor {
-public:
-  Tensor<T> make(size_t byte_size, const Shape &shape,
-                 const Device &device = Device::kCPU);
-  struct Content;
-
-private:
-  Content *content;
-};
+void printMatrix(taco::Tensor<double> &x);
+}  // namespace simu
 
 #endif // SIMULATOR_TENSOR_H

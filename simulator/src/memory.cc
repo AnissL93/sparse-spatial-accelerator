@@ -14,25 +14,19 @@ static size_t align(size_t s, size_t alignment) {
 }
 
 struct Memory::Content {
-  size_t byte_size = 0;
-  size_t datawidth = 0;
-  size_t bandwidth = 0;
-  size_t latency = 0;
+  arch::Memory config;
   uint8_t* data = nullptr;
 };
 
-Memory::Memory(size_t size, size_t bandwidth, size_t latency, size_t datawidth) {
+Memory::Memory(arch::Memory mem) {
   auto c = std::make_shared<Content>();
-  c->byte_size = size;
-  c->bandwidth = bandwidth;
-  c->datawidth = datawidth;
-  c->latency = latency;
-  c->data = new uint8_t[size];
-  memset(c->data, 0, size);
+  c->config = mem;
+  c->data = new uint8_t[byteSize()];
+  memset(c->data, 0, byteSize());
 }
 
 size_t Memory::byteSize() const {
-  return content->byte_size;
+  return content->config.size() * content->config.datawidth();
 }
 
 Cost Memory::write(const void *src_data, size_t dst_addr, size_t size) {
@@ -56,16 +50,18 @@ Cost Memory::read(void *dst_data, size_t src_addr, size_t size) const {
 }
 
 Cost Memory::writeCost(size_t size) const {
-  size_t lat = content->latency +
-               content->bandwidth * align(size, content->datawidth);
+  size_t lat = content->config.latency() +
+               content->config.bandwidth() * align(size,
+                                                   content->config.datawidth());
   // todo: don't know how to compute
   double energy = 0.;
   return Cost{.latency = lat, .energy = energy};
 }
 
 Cost Memory::readCost(size_t size) const {
-  size_t lat = content->latency +
-               content->bandwidth * align(size, content->datawidth);
+  size_t lat = content->config.latency() +
+               content->config.bandwidth() * align(size,
+                                                   content->config.datawidth());
   // todo: don't know how to compute
   double energy = 0.;
   return Cost{.latency = lat, .energy = energy};

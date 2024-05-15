@@ -4,6 +4,8 @@
 #include "taco.h"
 #include <gtest/gtest.h>
 
+#include "src/tensor.h"
+
 using namespace taco;
 
 void fill(Tensor<double>& t, int a, int b) {
@@ -35,7 +37,7 @@ TEST(sparse_matmul, spmm1) {
 //  fill(B,n, k);
 
   util::fillTensor(A, util::FillMethod::Dense );
-  util::fillTensor(B, util::FillMethod::Sparse );
+  util::fillTensor(B, util::FillMethod::Dense, 0.3 );
 
 
   IndexVar i, j, kk;
@@ -56,6 +58,11 @@ TEST(sparse_matmul, spmm1) {
     }
   }
   ASSERT_TRUE(equals(C_ref, C));
+
+  auto cc = simu::slice(C, {1, 0}, {2,2});
+  simu::printMatrix(C);
+  simu::printMatrix(cc);
+
   FAIL();
 }
 //

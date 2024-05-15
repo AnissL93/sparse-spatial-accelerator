@@ -5,15 +5,19 @@
 #ifndef SIMULATOR_CHIP_H
 #define SIMULATOR_CHIP_H
 
-#include "src/pe.h"
+#include "src/config/arch_config.h"
 #include "src/memory.h"
+#include "src/pe.h"
+#include "taco/tensor.h"
 
 namespace simu {
 
 class Chip {
 public:
+  Chip(arch::Arch);
 
-  Chip(size_t num_pe, size_t dram = -1 /*-1 means infinit*/);
+  void distribute_to_sram(taco::Tensor<double> &x,
+                          const std::vector<int> &tile_size);
 
 private:
   struct Content;

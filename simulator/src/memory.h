@@ -5,6 +5,7 @@
 #ifndef SIMULATOR_MEMORY_H
 #define SIMULATOR_MEMORY_H
 
+#include "src/config/arch_config.h"
 #include <iostream>
 #include <memory>
 #include <optional>
@@ -23,7 +24,7 @@ struct Cost {
 class Memory {
 public:
   Memory() {};
-  Memory(size_t size, size_t bandwidth, size_t latency, size_t datawidth);
+  Memory(arch::Memory mem);
   ~Memory() = default;
   // Get cost for reading data of size
   Cost readCost(size_t size) const;
@@ -39,24 +40,6 @@ public:
 private:
   struct Content;
   std::shared_ptr<Content> content;
-};
-
-class RegisterFile : public Memory {
-public:
-  RegisterFile() : Memory() {}
-  RegisterFile(size_t num, size_t width) : Memory(num * width, 0, 0, width) {}
-};
-
-class SRAM : public Memory {
-public:
-  SRAM() : Memory() {}
-  SRAM(size_t line_num, size_t width) : Memory(line_num * width, 0, 0, width) {}
-};
-
-class DRAM : public Memory {
-public:
-  DRAM() : Memory() {}
-  DRAM(size_t line_num, size_t width) : Memory(line_num * width, 0, 0, width) {}
 };
 
 }  // namespace simu

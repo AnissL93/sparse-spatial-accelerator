@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package event; // Requried to generate valid code.
+
+import "google/protobuf/any.proto";
+
+enum SparseMode {
+  SPMM = 0;
+  SDDM = 1;
+  DIAG = 2;
+  BLOCK = 3;
+}
+
+enum MemoryMode {
+  READ = 0;
+  WRITE = 1;
+}
+
+message MemoryEvent {
+  MemoryMode mode = 1;
+  int32 byte_size = 2; // number of byte size to read
+  int32 addr = 3;
+}
+
+enum PEMode {
+  VEC = 0;
+  ACC = 1;
+  META = 2; // compute meta data
+}
+
+message PEEvent {
+  PEMode mode = 1;
+}
+
+message Event {
+  oneof e {
+    PEEvent pe_event = 1;
+    MemoryEvent mem_event = 2;
+  }
+  int64 clock = 3;
+}
