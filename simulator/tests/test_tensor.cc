@@ -1,6 +1,5 @@
 
 #include "taco/tensor.h"
-#include "taco/util/fill.h"
 #include "taco.h"
 #include <gtest/gtest.h>
 
@@ -36,8 +35,8 @@ TEST(sparse_matmul, spmm1) {
 //  fill(A, m, k);
 //  fill(B,n, k);
 
-  util::fillTensor(A, util::FillMethod::Dense );
-  util::fillTensor(B, util::FillMethod::Dense, 0.3 );
+//  simu::fillRandom<double>(A, util::FillMethod::Dense );
+//  simu::fillRandom<double>(B, util::FillMethod::Dense, 0.3 );
 
 
   IndexVar i, j, kk;

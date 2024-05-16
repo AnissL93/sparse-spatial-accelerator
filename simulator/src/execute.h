@@ -14,7 +14,6 @@ namespace simu {
 
 class Executor {
 public:
-
   void load_matrix();
   void run();
 

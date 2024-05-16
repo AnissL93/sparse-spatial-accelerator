@@ -9,7 +9,9 @@ using namespace simu;
 
 TEST(task, spmm) {
   Task spmm = Task::makeSPMM(4, 4, 4, 0.2, "spmm0");
+  spmm.compute();
   spmm.dump();
+
   FAIL();
 }
 

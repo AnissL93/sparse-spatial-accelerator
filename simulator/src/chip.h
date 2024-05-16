@@ -16,8 +16,9 @@ class Chip {
 public:
   Chip(arch::Arch);
 
-  void distribute_to_sram(taco::Tensor<double> &x,
-                          const std::vector<int> &tile_size);
+  void distribute_to_sram(taco::Tensor<double> &x);
+
+  arch::Arch config() const;
 
 private:
   struct Content;

@@ -6,10 +6,10 @@
 
 namespace simu {
 
-//void Executor::load_matrix(event::MemoryEvent event1) {
-//  event1.byte_size();
-//}
-
 void Executor::run() {}
+
+void Executor::load_matrix() {
+
+}
 
 }  // namespace simu

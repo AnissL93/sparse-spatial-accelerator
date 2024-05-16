@@ -3,6 +3,7 @@
 //
 
 #include "src/chip.h"
+#include "src/tensor.h"
 #include "src/config/arch_config.h"
 #include <vector>
 
@@ -23,12 +24,24 @@ Chip::Chip(arch::Arch c) {
   content->dram = Memory(c.mem());
 }
 
-void Chip::distribute_to_sram(taco::Tensor<double> &x,
-                              const std::vector<int> &tile_size) {
+arch::Arch Chip::config() const {
+  return content->config;
+}
+
+void Chip::distribute_to_sram(taco::Tensor<double> &x) {
+  int tilex = (int)ceil(x.getDimension(0) / config().x());
+  int tiley = (int)ceil(x.getDimension(1) / config().y());
   for (int i = 0; i < content->config.x(); ++i) {
+    int stx = i * tilex;
+    int sizex = std::min(tilex, x.getDimension(0) - stx);
     for (int j = 0; j < content->config.y(); ++j) {
+      int sty = j * tiley;
+      int sizey = std::min(tiley, x.getDimension(1) - sty);
+
       int idx = i * content->config.y() + j;
       PECluster& pec = content->pe.at(idx);
+      taco::Tensor<int> subtensor = slice(x, {stx, sty}, {sizex, sizey});
+      Memory mem = pec.mem();
     }
   }
 }

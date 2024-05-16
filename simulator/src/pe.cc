@@ -1,6 +1,5 @@
 
 #include "src/pe.h"
-#include "src/memory.h"
 #include <vector>
 
 namespace simu {
@@ -16,11 +15,19 @@ PE::PE(arch::PE pe) {
   content->register_file = Memory(pe.mem());
 }
 
+arch::PE PE::config() const {
+  return content->config;
+}
+
 struct PECluster::Content {
   arch::PECluster config;
   std::vector<PE> pes;
   Memory sram;
 };
+
+arch::PECluster PECluster::config() const {
+  return content->config;
+}
 
 PECluster::PECluster(arch::PECluster pe) {
   content = std::make_shared<Content>();
@@ -29,6 +36,15 @@ PECluster::PECluster(arch::PECluster pe) {
   for (int i = 0; i < pe.pes_size(); ++i) {
     content->pes.emplace_back(pe.pes(i));
   }
+}
+
+PE PECluster::pe(int idx) {
+  assert(idx < content->pes.size() && "pe index out of range!");
+  return content->pes[idx];
+}
+
+Memory PECluster::mem() {
+  return content->sram;
 }
 
 

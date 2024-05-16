@@ -14,10 +14,6 @@ public:
   BaseUnit() {}
 
   void load_inst();
-
-private:
-  struct Content;
-  std::shared_ptr<Content> content;
 };
 
 } // namespace simu

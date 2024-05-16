@@ -7,8 +7,5 @@
 
 namespace simu {
 
-struct BaseUnit::Content {
-};
-
 
 }  // namespace simu

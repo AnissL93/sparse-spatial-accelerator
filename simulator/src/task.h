@@ -13,6 +13,11 @@ class Task {
 public:
   Task() {}
   static Task makeSPMM(int, int, int, float, const std::string&);
+  static Task makeSDDM(int, int, int, float, const std::string&);
+  const taco::Tensor<double>& a() const;
+  const taco::Tensor<double>& b() const;
+  const taco::Tensor<double>& c() const;
+  void compute();
   void dump() const;
 private:
   struct Content;
