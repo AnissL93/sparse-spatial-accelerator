@@ -18,7 +18,7 @@ public:
   void run();
 
 private:
-  Task task;
+  Task<double> task;
   Chip chip;
   std::priority_queue<event::Event, std::vector<event::Event>, EventCmp> event;
 };

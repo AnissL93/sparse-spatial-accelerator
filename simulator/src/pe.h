@@ -19,7 +19,7 @@ private:
   std::shared_ptr<Content> content;
 };
 
-class PECluster : public BaseUnit {
+class PECluster : public BaseUnit<PECluster> {
 public:
   PECluster() {}
   PECluster(arch::PECluster pec);

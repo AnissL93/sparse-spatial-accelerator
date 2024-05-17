@@ -9,14 +9,22 @@
 
 namespace simu {
 
+template<typename T>
 class Task {
 public:
   Task() {}
+  /**
+   * Create spmm task with random number
+   */
   static Task makeSPMM(int, int, int, float, const std::string&);
+  /*
+   * Create sddm task with random number
+   */
   static Task makeSDDM(int, int, int, float, const std::string&);
-  const taco::Tensor<double>& a() const;
-  const taco::Tensor<double>& b() const;
-  const taco::Tensor<double>& c() const;
+  const taco::Tensor<T>& a() const;
+  const taco::Tensor<T>& b() const;
+  const taco::Tensor<T>& c() const;
+  taco::Tensor<int> mask() const;
   void compute();
   void dump() const;
 private:
