@@ -9,16 +9,14 @@
 
 namespace simu {
 
-template<typename SubClass>
 class BaseUnit {
 public:
   BaseUnit() {}
 
   void load_inst();
 
-  void printInfo() {
-    static_cast<SubClass>(this)->print();
-  }
+  virtual size_t exe() { return 0;};
+
 };
 
 } // namespace simu

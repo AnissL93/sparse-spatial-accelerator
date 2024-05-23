@@ -9,29 +9,35 @@
 
 namespace simu {
 
-template<typename T>
-class Task {
+template <typename T> class Task {
 public:
   Task() {}
   /**
    * Create spmm task with random number
    */
-  static Task makeSPMM(int, int, int, float, const std::string&);
+  static Task makeSPMM(int m, int n, int k, float dp, const std::string &name);
   /*
    * Create sddm task with random number
    */
-  static Task makeSDDM(int, int, int, float, const std::string&);
-  const taco::Tensor<T>& a() const;
-  const taco::Tensor<T>& b() const;
-  const taco::Tensor<T>& c() const;
+  static Task makeSDDM(int, int, int, float, const std::string &);
+  const taco::Tensor<T> &a() const;
+  const taco::Tensor<T> &b() const;
+  const taco::Tensor<T> &c() const;
   taco::Tensor<int> mask() const;
   void compute();
   void dump() const;
+  void setTileSize(int m, int n, int k);
+  int getMTileSize() const;
+  int getNTileSize() const;
+  int getKTileSize() const;
+  int getMTileNum() const;
+  int getNTileNum() const;
+  int getKTileNum() const;
+
 private:
   struct Content;
   std::shared_ptr<Content> content;
 };
-
 
 } // namespace simu
 

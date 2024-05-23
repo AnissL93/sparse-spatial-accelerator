@@ -30,7 +30,7 @@ TEST(sparse_matmul, spmm1) {
   Format dense_2d({Dense, Dense});
   Format csr({Dense, Sparse});
 
-  int m = 3, k = 3, n = 2;
+  int m = 4, k = 4, n = 4;
 
   Tensor<double> A({m,k}, dense_2d);
   Tensor<double> B({n,k}, csr);
@@ -42,7 +42,7 @@ TEST(sparse_matmul, spmm1) {
   C.setName("C");
   C_ref.setName("C_ref");
 
-  simu::fillRandom<double>(A, simu::FillMethod::Dense );
+  simu::fillRandom<double>(A, simu::FillMethod::Sparse, 0.5);
   simu::fillRandom<double>(B, simu::FillMethod::Dense, 0.3 );
 
 

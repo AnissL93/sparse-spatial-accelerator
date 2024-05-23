@@ -11,6 +11,9 @@ namespace simu {
 
 arch::Arch parseProto(const std::string& file);
 
+void getRF(arch::Memory* mem, int datasize, int datanum);
+void getSRAM(arch::Memory* mem, int datasize, int datanum);
+
 }  // namespace simu
 
 #endif // SIMULATOR_ARCH_CONFIG_H

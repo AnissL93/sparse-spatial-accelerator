@@ -15,6 +15,9 @@ template <typename T> struct Task<T>::Content {
   taco::Tensor<T> a, b, c;
   taco::Tensor<int> mask;
   std::string name;
+
+  // tile size
+  int m_tile, n_tile, k_tile;
 };
 
 template <typename T>
@@ -44,6 +47,31 @@ Task<T> Task<T>::makeSDDM(int m, int n, int k, float dp,
   return t;
 }
 
+template <typename T> void Task<T>::setTileSize(int m, int n, int k) {
+  content->m_tile = m;
+  content->n_tile = n;
+  content->k_tile = k;
+}
+
+template <typename T> int Task<T>::getMTileSize() const {
+  return content->m_tile;
+}
+template <typename T> int Task<T>::getNTileSize() const {
+  return content->n_tile;
+}
+template <typename T> int Task<T>::getKTileSize() const {
+  return content->k_tile;
+}
+template <typename T> int Task<T>::getMTileNum() const {
+  return static_cast<int>(ceil(content->m / content->m_tile));
+}
+template <typename T> int Task<T>::getNTileNum() const {
+  return static_cast<int>(ceil(content->n / content->n_tile));
+}
+template <typename T> int Task<T>::getKTileNum() const {
+  return static_cast<int>(ceil(content->k / content->k_tile));
+}
+
 template <typename T>
 Task<T> Task<T>::makeSPMM(int m, int n, int k, float dp,
                           const std::string &name) {
@@ -60,9 +88,12 @@ Task<T> Task<T>::makeSPMM(int m, int n, int k, float dp,
   t.content->b.setName(name + "_b");
   t.content->c = Tensor<T>({m, n}, sparse);
   t.content->c.setName(name + "_c");
+  t.content->c.pack();
   t.content->density = dp;
   t.content->name = name;
-  fillRandom<T>(t.content->a, FillMethod::Dense, dp);
+  std::cout << "fffffffffff\n";
+  fillRandom<T>(t.content->a, FillMethod::Sparse, dp);
+  std::cout << "fffffffffff\n";
   fillRandom<T>(t.content->b, FillMethod::Dense);
   return t;
 }
@@ -84,9 +115,9 @@ template <typename T> void Task<T>::compute() {
 template <typename T> void Task<T>::dump() const {
   std::cout << "=== Task: " << content->name << " density: " << content->density
             << " ===\n";
-  std::cout << ">>> " << content->a << std::endl;
-  std::cout << ">>> " << content->b << std::endl;
-  std::cout << ">>> " << content->c << std::endl;
+  printMatrix(content->a);
+  printMatrix(content->b);
+  printMatrix(content->c);
 }
 
 template <typename T> const taco::Tensor<T> &Task<T>::a() const {
@@ -106,6 +137,6 @@ template <typename T> taco::Tensor<int> Task<T>::mask() const {
 }
 
 template class Task<int>;
-template class Task<double>;
+template class Task<float>;
 
 } // namespace simu

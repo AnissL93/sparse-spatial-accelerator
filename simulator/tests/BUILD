@@ -40,3 +40,25 @@ cc_gtest(
         "//src:core",
     ],
 )
+
+cc_gtest(
+    name = "test_pe",
+    srcs = [
+        "test_pe.cc",
+    ],
+    deps = [
+        ":utils",
+        "//src:core",
+    ],
+)
+
+cc_gtest(
+    name = "test_chip",
+    srcs = [
+        "test_chip.cc",
+    ],
+    deps = [
+        ":utils",
+        "//src:core",
+    ],
+)

@@ -27,13 +27,16 @@ message PE {
 }
 
 message PECluster {
-  repeated PE pes = 1;
-  Memory mem = 2;
+  // Assume all PEs in one cluster are the same.
+  PE pe = 1;
+  int32 pe_num = 2;
+  Memory mem = 3;
 }
 
 message Arch {
-  repeated PECluster pe_clusters = 1;
-  Memory mem = 2;
-  int32 x = 3;
-  int32 y = 4;
+  PECluster pe_cluster = 1;
+  Memory edge_mem_left = 2;
+  Memory edge_mem_bottom = 3;
+  int32 x_num = 4;
+  int32 y_num = 5;
 }

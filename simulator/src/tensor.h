@@ -39,6 +39,7 @@ taco::Tensor<T> slice(taco::Tensor<T> x, const std::vector<int> &st,
       subtensor.insert({i, j}, x.at({st[0] + i, st[1] + j}));
     }
   }
+  subtensor.pack();
   subtensor.setName(x.getName() + "_sub");
   return subtensor;
 }
@@ -56,9 +57,10 @@ template <typename T> void printMatrix(taco::Tensor<T> x) {
   }
 }
 
+
 template <typename T>
 void fillRandom(taco::TensorBase &tens, const FillMethod &fill,
-                double fillValue = 1., bool binary = false) {
+                T fillValue = 1., bool binary = false) {
   const std::map<FillMethod, double> fillFactors = {
       {FillMethod::Dense, 1.0},         {FillMethod::Uniform, 1.0},
       {FillMethod::Random, 1.0},        {FillMethod::Sparse, 0.07},
@@ -66,12 +68,12 @@ void fillRandom(taco::TensorBase &tens, const FillMethod &fill,
       {FillMethod::SlicingV, 0.01},     {FillMethod::FEM, 0.0}};
 
   // Random values
-  const double doubleLowerBound = -10e6;
-  const double doubleUpperBound = 10e6;
+  const float doubleLowerBound = -10e6;
+  const float doubleUpperBound = 10e6;
   const int blockDimension = 4;
   const FillMethod blockFillMethod = FillMethod::FEM;
 
-  std::uniform_real_distribution<double> unif(doubleLowerBound,
+  std::uniform_real_distribution<float> unif(doubleLowerBound,
                                               doubleUpperBound);
   std::default_random_engine re;
   re.seed(std::random_device{}());
@@ -174,7 +176,7 @@ void fillRandom(taco::TensorBase &tens, const FillMethod &fill,
     for (const auto &elem : BaseTensor) {
       int row = (int)elem.first[0] * blockDimension;
       int col = (int)elem.first[1] * blockDimension;
-      double value = elem.second;
+      T value = elem.second;
       for (int i = 0; i < blockDimension; i++) {
         for (int j = 0; j < blockDimension; j++) {
           T val = static_cast<T>(value / (i + 1));
@@ -192,11 +194,10 @@ void fillRandom(taco::TensorBase &tens, const FillMethod &fill,
   tens.pack();
 }
 
-template<typename T>
-size_t getByteSize(taco::Tensor<T> x) {
-  size_t s = std::accumulate(x.getDimensions().begin(), x.getDimensions().end
-                                                        (), 0);
-  return sizeof(T) * s;
+template <typename T> size_t getByteSize(taco::Tensor<T> x) {
+  int size =
+      std::accumulate(x.getDimensions().begin(), x.getDimensions().end(), 1);
+  return size * sizeof(T);
 }
 
 } // namespace simu

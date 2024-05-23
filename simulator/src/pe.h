@@ -8,26 +8,40 @@
 
 namespace simu {
 
-class PE {
+struct PEIndex {
+  int x;
+  int y;
+};
+
+class PE : public BaseUnit {
 public:
   PE() {}
   PE(arch::PE pe);
   arch::PE config() const;
+
+  template <typename T>
+  size_t vec_add(int dst, int r0, int r1);
+
+  template <typename T>
+  size_t sparseVecMatmul(int dst, taco::Tensor<T> vec, taco::Tensor<T> mat);
+
+  const Memory&getRF() const;
 
 private:
   struct Content;
   std::shared_ptr<Content> content;
 };
 
-class PECluster : public BaseUnit<PECluster> {
+class PECluster : public BaseUnit {
 public:
   PECluster() {}
-  PECluster(arch::PECluster pec);
+  PECluster(const arch::PECluster &pec,
+            const PEIndex & index);
 
-  PE pe(int idx);
+  const PE &pe(int idx) const;
   arch::PECluster config() const;
   Memory mem();
-
+  const PEIndex& index() const;
 private:
   struct Content;
   std::shared_ptr<Content> content;

@@ -17,4 +17,23 @@ arch::Arch parseProto(const std::string& file) {
   return arch;
 }
 
+void getRF(arch::Memory* mem, int datasize, int datanum) {
+  mem->set_type(arch::RF);
+  mem->set_latency(0);
+  mem->set_bandwidth(1);
+  mem->set_datawidth(datasize);
+  mem->set_name("rf");
+  mem->set_size(datanum);
+}
+
+void getSRAM(arch::Memory* mem, int datasize, int datanum) {
+  mem->set_type(arch::SRAM);
+  mem->set_latency(500);
+  mem->set_bandwidth(1);
+  mem->set_datawidth(datasize);
+  mem->set_name("sram");
+  mem->set_size(datanum);
+}
+
+
 }  // namespace simu

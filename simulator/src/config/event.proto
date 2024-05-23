@@ -18,7 +18,7 @@ enum MemoryMode {
 
 message MemoryEvent {
   MemoryMode mode = 1;
-  int32 byte_size = 2; // number of byte size to read
+  int32 byte_size = 2; // number of byte size to readByte
   int32 addr = 3;
 }
 
@@ -28,8 +28,13 @@ enum PEMode {
   META = 2; // compute meta data
 }
 
-message PEEvent {
+// sparse vector multiply with matrix, and accumulate together
+// input: sparse vector of [m] with x none-zeros, dense matrix of [l, m]
+// output: [l], x scalar x vector is performed and accumulated.
+// l is the vector lane
+message PEVMSAcc {
   PEMode mode = 1;
+  int32 none_zero_num = 2;
 }
 
 message Event {

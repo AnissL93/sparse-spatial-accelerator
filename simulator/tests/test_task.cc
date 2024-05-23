@@ -10,18 +10,18 @@
 using namespace simu;
 
 TEST(task, spmm) {
-  Task<double> spmm = Task<double>::makeSPMM(10, 8, 4, 0.2, "spmm0");
+  Task<float> spmm = Task<float>::makeSPMM(10, 8, 4, 0.2, "spmm0");
   spmm.compute();
-  Tensor<double> ref(spmm.c().getDimensions());
+  Tensor<float> ref(spmm.c().getDimensions());
   matmulRef(spmm.a(), spmm.b(), ref);
   ASSERT_TRUE(equals(spmm.c(), ref));
 }
 
 TEST(task, sddm) {
   {
-    Task<double> sddm = Task<double>::makeSDDM(10, 8, 4, 0.5, "spmm0");
+    Task<float> sddm = Task<float>::makeSDDM(10, 8, 4, 0.5, "spmm0");
     sddm.compute();
-    Tensor<double> ref("ref", sddm.c().getDimensions());
+    Tensor<float> ref("ref", sddm.c().getDimensions());
     matmulRef(sddm.a(), sddm.b(), ref, sddm.mask());
     ASSERT_TRUE(equals(sddm.c(), ref));
   }
