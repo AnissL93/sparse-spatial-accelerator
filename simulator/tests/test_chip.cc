@@ -1,7 +1,6 @@
 //
 // Created by hyl on 21/05/24.
 //
-
 #include "gtest/gtest.h"
 #include "src/chip.h"
 

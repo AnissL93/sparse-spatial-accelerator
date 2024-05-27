@@ -36,6 +36,9 @@ template <typename T> Cost Chip::execute(const Task<T> &t) {
 
   Cost c{.latency = 0, .energy = 0.f};
 
+
+
+
   return c;
 }
 
@@ -49,11 +52,6 @@ void Chip::loadA(const taco::Tensor<T> &a, int m_index, int y_index,
 
   printMatrix(subtensor);
 }
-
-// template <typename T>
-// void Chip::loadAFromLeft() {
-//
-// }
 
 template <typename T> void Chip::distribute_to_sram(const taco::Tensor<T> &x) {
   int tilex = (int)ceil(x.getDimension(0) / config().x_num());

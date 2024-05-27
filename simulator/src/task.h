@@ -6,6 +6,7 @@
 #define SIMULATOR_TASK_H
 
 #include "taco/tensor.h"
+#include "src/config/event.h"
 
 namespace simu {
 

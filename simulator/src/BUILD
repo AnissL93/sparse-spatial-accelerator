@@ -39,6 +39,8 @@ cc_library(
     srcs = [
         "chip.cc",
         "chip.h",
+        "event_gen.cc",
+        "event_gen.h",
         "execute.cc",
         "execute.h",
         "task.cc",
@@ -46,7 +48,8 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "tensor",
+        ":memory",
         ":pe",
+        ":tensor",
     ],
 )

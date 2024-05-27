@@ -11,36 +11,32 @@ enum SparseMode {
   BLOCK = 3;
 }
 
-enum MemoryMode {
-  READ = 0;
-  WRITE = 1;
-}
-
-message MemoryEvent {
-  MemoryMode mode = 1;
-  int32 byte_size = 2; // number of byte size to readByte
-  int32 addr = 3;
-}
-
-enum PEMode {
-  VEC = 0;
-  ACC = 1;
-  META = 2; // compute meta data
-}
+// enum MemoryMode {
+//   READ = 0;
+//   WRITE = 1;
+// }
+//
+// message MemoryEvent {
+//   MemoryMode mode = 1;
+//   int32 byte_size = 2; // number of byte size to readByte
+//   int32 addr = 3;
+// }
 
 // sparse vector multiply with matrix, and accumulate together
 // input: sparse vector of [m] with x none-zeros, dense matrix of [l, m]
 // output: [l], x scalar x vector is performed and accumulated.
 // l is the vector lane
-message PEVMSAcc {
-  PEMode mode = 1;
-  int32 none_zero_num = 2;
+
+enum EventType {
+  PE_VMS = 0;
+  PE_ST = 1;
+  PE_LD = 2;
+  PASS = 3;
 }
 
 message Event {
-  oneof e {
-    PEEvent pe_event = 1;
-    MemoryEvent mem_event = 2;
-  }
-  int64 clock = 3;
+  EventType type= 1;
+  int64 dur_clock = 2;
+  int64 row_idx = 3;
+  int64 clock = 4;
 }

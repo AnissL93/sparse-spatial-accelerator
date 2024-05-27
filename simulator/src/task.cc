@@ -91,9 +91,7 @@ Task<T> Task<T>::makeSPMM(int m, int n, int k, float dp,
   t.content->c.pack();
   t.content->density = dp;
   t.content->name = name;
-  std::cout << "fffffffffff\n";
   fillRandom<T>(t.content->a, FillMethod::Sparse, dp);
-  std::cout << "fffffffffff\n";
   fillRandom<T>(t.content->b, FillMethod::Dense);
   return t;
 }

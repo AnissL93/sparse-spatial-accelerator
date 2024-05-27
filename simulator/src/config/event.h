@@ -6,13 +6,38 @@
 #define SIMULATOR_EVENT_H
 
 #include "src/config/event.pb.h"
+#include <list>
+#include <queue>
 
 namespace simu {
 
 struct EventCmp {
-  bool operator()(const event::Event& e1, const event::Event& e2);
+  bool operator()(const event::Event &e1, const event::Event &e2);
 };
 
+using Event = event::Event;
+
+void printEvent(const Event & e);
+
+std::string toString(const Event& e);
+
+class EventQueue {
+public:
+  EventQueue(int pe_num){
+    event_queue_.resize(pe_num);
+  }
+  void pushEvent(int peIdx, const Event &e);
+  // Insert e[40-50] at clock will cut the event that is at clock to be two
+  // parts.
+  void insertEvent(int peIdx, const Event &new_e, int clock);
+
+  void updateClock(int64_t st = 0);
+
+  void print() const;
+
+private:
+  std::vector<std::list<Event>> event_queue_;
+};
 
 } // namespace simu
 
