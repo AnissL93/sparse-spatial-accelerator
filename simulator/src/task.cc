@@ -75,7 +75,7 @@ template <typename T> int Task<T>::getKTileNum() const {
 template <typename T>
 Task<T> Task<T>::makeSPMM(int m, int n, int k, float dp,
                           const std::string &name) {
-  Format csr({Dense, Sparse});
+  Format csr({Sparse, Sparse});
   Format dense_2d({Dense, Dense});
   Task t;
   t.content = std::make_shared<Content>();

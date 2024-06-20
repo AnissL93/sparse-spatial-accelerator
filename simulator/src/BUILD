@@ -4,7 +4,10 @@ cc_library(
         "tensor.cc",
         "tensor.h",
     ],
-    deps = ["//:taco"],
+    deps = [
+        "//:taco",
+        "@com_github_google_glog//:glog",
+    ],
 )
 
 cc_library(

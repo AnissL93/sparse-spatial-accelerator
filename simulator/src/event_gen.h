@@ -8,6 +8,7 @@
 #include "src/config/event.h"
 #include "src/task.h"
 #include "src/tensor.h"
+#include "glog/logging.h"
 #include <queue>
 
 namespace simu {
@@ -22,10 +23,8 @@ void initEvents(const EventQueue& q, const Task<T> &t) {
                         {t.getMTileSize(), t.getKTileSize()});
       auto nz = suba.getStorage().getValues().getSize();
 
-      std::cout << "nz " << nz << std::endl;
-      printMatrix(suba);
-
-      std::cout << suba << std::endl;
+      LOG(INFO) << "nz of tile " << i << " " << j << " is " << nz << std::endl;
+      LOG(INFO) << suba << std::endl;
     }
   }
 }

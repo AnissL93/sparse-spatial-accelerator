@@ -1,7 +1,11 @@
 workspace(name = "sparse")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
+load(
+    "@bazel_tools//tools/build_defs/repo:git.bzl",
+    "git_repository",
+    "new_git_repository",
+)
 
 # Group the sources of the library so that CMake rule have access to it
 all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
@@ -116,6 +120,18 @@ http_archive(
     sha256 = "c29d8b4b79389463c546f98b15aa4391d4ed7ec459340c47bffe15db63eb9126",
     strip_prefix = "protobuf-3.21.3",
     urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.21.3.tar.gz"],
+)
+
+git_repository(
+    name = "com_github_google_glog",
+    remote = "https://github.com/google/glog.git",
+    tag = "v0.7.1",
+)
+
+git_repository(
+    name = "com_github_gflags_gflags",
+    remote = "https://github.com/gflags/gflags.git",
+    tag = "v2.2.2",
 )
 
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
