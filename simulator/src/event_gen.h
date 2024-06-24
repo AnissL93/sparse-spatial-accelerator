@@ -8,6 +8,7 @@
 #include "src/config/event.h"
 #include "src/task.h"
 #include "src/tensor.h"
+#include "src/chip.h"
 #include "glog/logging.h"
 #include <queue>
 
@@ -15,18 +16,25 @@ namespace simu {
 
 // Initialize events for the first line of PEs.
 template <typename T>
-void initEvents(const EventQueue& q, const Task<T> &t) {
+void initEvents(EventQueue& q, const Task<T> &t, unsigned vec_lane_size) {
   for (int i = 0; i < t.getKTileNum(); ++i) {
     for (int j = 0; j < t.getMTileNum(); ++j) {
       taco::Tensor<T> suba = slice(t.a(), {j * t.getMTileSize(), i * t
                                                                        .getKTileSize()},
                         {t.getMTileSize(), t.getKTileSize()});
-      auto nz = suba.getStorage().getValues().getSize();
 
-      LOG(INFO) << "nz of tile " << i << " " << j << " is " << nz << std::endl;
-      LOG(INFO) << suba << std::endl;
+      unsigned none_zero = getNumOfNoneZero<T>(suba);
+      unsigned clock_of_compute = static_cast<unsigned >(std::ceil((float) none_zero /
+                                                         (float)vec_lane_size));
+      event::Event event1;
+      event1.set_type(event::PE_VMS);
+      event1.set_clock(0);
+      event1.set_dur_clock(clock_of_compute);
+      event1.set_row_idx(j);
+      q.pushEvent(i, event1);
     }
   }
+  q.updateClock();
 }
 
 } // namespace simu

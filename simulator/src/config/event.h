@@ -21,6 +21,9 @@ void printEvent(const Event & e);
 
 std::string toString(const Event& e);
 
+/*
+ * Events for all PEs
+ */
 class EventQueue {
 public:
   EventQueue(int pe_num){
@@ -36,6 +39,7 @@ public:
   void print() const;
 
 private:
+  //PE<list of events>
   std::vector<std::list<Event>> event_queue_;
 };
 

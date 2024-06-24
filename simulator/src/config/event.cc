@@ -78,13 +78,13 @@ std::string toString(const Event &e) {
     ss << "vms";
     break;
   case event::PE_LD:
-    ss << "ld";
+    ss << "ld ";
     break;
   case event::PE_ST:
-    ss << "st";
+    ss << "st ";
     break;
   case event::PASS:
-    ss << "pass";
+    ss << "pas";
     break;
   default:
     break;
@@ -100,7 +100,10 @@ void EventQueue::print() const {
     auto &l = event_queue_.at(i);
     std::cout << "PE " << i << ", " << l.size()  << " events: ";
     for (auto it = l.begin(); it != l.end(); ++it) {
-      std::cout << toString(*it) << " --> ";
+      std::cout << toString(*it);
+      if ((std::next(it)) != l.end()) {
+        std::cout << " --> ";
+      }
     }
     std::cout << "\n";
   }

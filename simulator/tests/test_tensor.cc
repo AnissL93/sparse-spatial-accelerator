@@ -5,6 +5,7 @@
 
 #include "src/tensor.h"
 #include "tests/utils.h"
+#include "glog/logging.h"
 
 using namespace taco;
 
@@ -32,18 +33,23 @@ TEST(sparse_matmul, spmm1) {
 
   int m = 4, k = 4, n = 4;
 
-  Tensor<double> A({m,k}, dense_2d);
-  Tensor<double> B({n,k}, csr);
-  Tensor<double> C({m,n}, dense_2d);
-  Tensor<double> C_ref({m,n}, dense_2d);
+  Tensor<float> A({m,k}, dense_2d);
+  Tensor<float> B({n,k}, csr);
+  Tensor<float> C({m,n}, dense_2d);
+  Tensor<float> C_ref({m,n}, dense_2d);
 
   A.setName("A");
   B.setName("B");
   C.setName("C");
   C_ref.setName("C_ref");
 
-  simu::fillRandom<double>(A, simu::FillMethod::Sparse, 0.5);
-  simu::fillRandom<double>(B, simu::FillMethod::Dense, 0.3 );
+  simu::generateSparseMatrix<float>(A, 0.5);
+  LOG(INFO) << "num of zero " << simu::getNumOfNoneZero(A);
+  simu::printMatrix(A);
+  FAIL();
+
+//  simu::fillRandom<double>(A, simu::FillMethod::Sparse, 0.5);
+//  simu::fillRandom<double>(B, simu::FillMethod::Dense, 0.3 );
 
 
   IndexVar i, j, kk;

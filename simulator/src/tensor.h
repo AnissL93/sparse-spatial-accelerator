@@ -27,6 +27,23 @@ enum class FillMethod {
   Blocked
 };
 
+
+template <typename T>
+unsigned getNumOfNoneZero(taco::Tensor<T> x ) {
+  unsigned ret = 0;
+  assert(x.getOrder() == 2 && "only support matrix!");
+  int m = x.getDimension(0);
+  int n = x.getDimension(1);
+  for (int i = 0; i < m; ++i) {
+    for (int j = 0; j < n; ++j) {
+      if (x.at({i, j}) != 0) {
+        ret ++;
+      }
+    }
+  }
+  return ret;
+}
+
 template <typename T>
 taco::Tensor<T> slice(taco::Tensor<T> x, const std::vector<int> &st,
                       const std::vector<int> &size) {
@@ -48,15 +65,35 @@ template <typename T> void printMatrix(taco::Tensor<T> x) {
   assert(x.getOrder() == 2 && "only support matrix!");
   int m = x.getDimension(0);
   int n = x.getDimension(1);
-  std::cout << "==== " << x.getName() << " [" << m << ", " << n << "] ===\n";
+  std::cout << "==== " << x.getName() << " [" << m << ", " << n << "] ===" <<
+      getNumOfNoneZero(x) << "/" << m*n << std::endl;
+
+  int width = 10;
+  int precision = 4;
+  std::cout << std::fixed; // Use fixed-point notation
+  std::cout << std::setprecision(precision); // Set precision
+
+  for (int i = 0; i < m+1; ++i) {
+    if (i == 0) {
+      std::cout << std::setw(width) << " ";
+    } else {
+      std::cout << std::setw(width) << i;
+    }
+  }
+  std::cout << std::endl;
+  std::cout << std::string(width * (m+1), '-') << std::endl;
+
   for (int i = 0; i < m; ++i) {
+    std::cout << std::setw(width) << i;
     for (int j = 0; j < n; ++j) {
-      std::cout << x.at({i, j}) << " ";
+      std::cout << std::setw(width) << x.at({i, j});
     }
     std::cout << std::endl;
   }
 }
 
+template<typename >
+void generateSparseMatrix(taco::TensorBase& tens, double density);
 
 template <typename T>
 void fillRandom(taco::TensorBase &tens, const FillMethod &fill,
@@ -199,6 +236,8 @@ template <typename T> size_t getByteSize(taco::Tensor<T> x) {
       std::accumulate(x.getDimensions().begin(), x.getDimensions().end(), 1);
   return size * sizeof(T);
 }
+
+
 
 } // namespace simu
 

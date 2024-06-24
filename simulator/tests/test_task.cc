@@ -12,6 +12,24 @@
 
 using namespace simu;
 
+class TestTask : public testing::Test {
+protected:
+
+  void SetUp() override {
+    spmm = Task<float>::makeSPMM(20, 20, 20, 0.2, "spmm0");
+    spmm.setTileSize(1, 5, 4);
+
+    sddm = Task<int>::makeSDDM(10, 8, 4, 0.2, "sddm0");
+  }
+
+  void TearDown() override {
+
+  }
+
+  Task<float> spmm;
+  Task<int> sddm;
+};
+
 TEST(event, basic) {
   LOG(INFO) << "this is a test";
 
@@ -49,13 +67,14 @@ TEST(event, basic) {
   FAIL();
 }
 
-TEST(task, genEvent) {
-  Task<float> spmm = Task<float>::makeSPMM(20, 20, 20, 0.6, "spmm0");
-  spmm.setTileSize(1, 5, 4);
+TEST_F(TestTask, spmm) {
   LOG(INFO) << spmm.getKTileNum();
   LOG(INFO) << spmm.getKTileSize();
-  EventQueue queue(3);
-  initEvents<float>(queue, spmm);
+
+  EventQueue queue(spmm.getKTileNum());
+
+  printMatrix(spmm.a());
+  initEvents<float>(queue, spmm, 4);
 
   queue.print();
 

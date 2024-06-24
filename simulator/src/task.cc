@@ -42,7 +42,8 @@ Task<T> Task<T>::makeSDDM(int m, int n, int k, float dp,
   fillRandom<T>(t.content->a, FillMethod::Dense);
   fillRandom<T>(t.content->b, FillMethod::Dense);
   if (t.content->mask.getOrder() > 0) {
-    fillRandom<int>(t.content->mask, FillMethod::Sparse, dp, true);
+    generateSparseMatrix<int>(t.content->mask, dp);
+//    fillRandom<int>(t.content->mask, FillMethod::Sparse, dp, true);
   }
   return t;
 }
@@ -91,7 +92,8 @@ Task<T> Task<T>::makeSPMM(int m, int n, int k, float dp,
   t.content->c.pack();
   t.content->density = dp;
   t.content->name = name;
-  fillRandom<T>(t.content->a, FillMethod::Sparse, dp);
+//  fillRandom<T>(t.content->a, FillMethod::Sparse, dp);
+  generateSparseMatrix<T>(t.content->a, dp);
   fillRandom<T>(t.content->b, FillMethod::Dense);
   return t;
 }
