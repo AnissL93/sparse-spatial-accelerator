@@ -3,6 +3,7 @@
 //
 
 #include "src/config/event.h"
+#include <iomanip>
 #include <sstream>
 
 namespace simu {
@@ -52,7 +53,7 @@ void EventQueue::insertEvent(int peIdx, const simu::Event &new_e, int clock) {
   std::cout << "insert " << toString(new_e) << std::endl;
   l.insert(replacedEvent, new_e);
   std::cout << "insert " << toString(e2) << std::endl;
-//  replacedEvent = std::next(replacedEvent);
+  //  replacedEvent = std::next(replacedEvent);
   l.insert(replacedEvent, e2);
 }
 
@@ -90,23 +91,46 @@ std::string toString(const Event &e) {
     break;
   }
 
-  ss << "[" << e.clock() << ", " << e.clock() + e.dur_clock() << "]@"
-     << e.row_idx();
+  ss << "[" << e.clock() << "+" << e.dur_clock() << "="
+     << e.clock() + e.dur_clock() << "]@" << e.row_idx();
   return ss.str();
 }
 
 void EventQueue::print() const {
+  std::cout << std::fixed;
   for (int i = 0; i < event_queue_.size(); ++i) {
     auto &l = event_queue_.at(i);
-    std::cout << "PE " << i << ", " << l.size()  << " events: ";
+    std::cout << "PE" << i << " ";
     for (auto it = l.begin(); it != l.end(); ++it) {
-      std::cout << toString(*it);
-      if ((std::next(it)) != l.end()) {
-        std::cout << " --> ";
-      }
+      std::cout << std::left << std::setw(20) << toString(*it);
     }
     std::cout << "\n";
   }
+}
+
+std::list<Event> &EventQueue::getEvent(int pe_index) {
+  return event_queue_.at(pe_index);
+}
+
+Event &EventQueue::getEventOfClock(int pe_index, unsigned clock) {
+  auto &event_list = event_queue_.at(pe_index);
+  for (auto iter = event_list.begin(); iter != event_list.end(); ++iter) {
+    auto st = iter->clock();
+    auto ed = iter->clock() + iter->dur_clock();
+    if (clock >= st && clock < ed) {
+      return *iter;
+    }
+  }
+  LOG(FATAL) << "No event found for clock " << clock;
+}
+
+Event createEvent(const event::EventType &type, int clock, int dur, int rid) {
+  Event e;
+  e.set_type(type);
+  e.set_dur_clock(dur);
+  e.set_clock(clock);
+  e.set_row_idx(rid);
+  return e;
 }
 
 } // namespace simu

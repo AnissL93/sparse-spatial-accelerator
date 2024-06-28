@@ -17,18 +17,18 @@ struct EventCmp {
 
 using Event = event::Event;
 
-void printEvent(const Event & e);
+void printEvent(const Event &e);
 
-std::string toString(const Event& e);
+std::string toString(const Event &e);
+
+Event createEvent(const event::EventType &type, int clock, int dur, int rid);
 
 /*
  * Events for all PEs
  */
 class EventQueue {
 public:
-  EventQueue(int pe_num){
-    event_queue_.resize(pe_num);
-  }
+  EventQueue(int pe_num) { event_queue_.resize(pe_num); }
   void pushEvent(int peIdx, const Event &e);
   // Insert e[40-50] at clock will cut the event that is at clock to be two
   // parts.
@@ -38,8 +38,15 @@ public:
 
   void print() const;
 
+  // Get event list in pe_index.
+  std::list<Event> &getEvent(int pe_index);
+
+  Event& getEventOfClock(int pe_index, unsigned clock);
+
+  int getPENum() const { return event_queue_.size(); }
+
 private:
-  //PE<list of events>
+  // PE<list of events>
   std::vector<std::list<Event>> event_queue_;
 };
 

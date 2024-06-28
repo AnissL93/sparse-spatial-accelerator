@@ -26,16 +26,20 @@ void initEvents(EventQueue& q, const Task<T> &t, unsigned vec_lane_size) {
       unsigned none_zero = getNumOfNoneZero<T>(suba);
       unsigned clock_of_compute = static_cast<unsigned >(std::ceil((float) none_zero /
                                                          (float)vec_lane_size));
-      event::Event event1;
-      event1.set_type(event::PE_VMS);
-      event1.set_clock(0);
-      event1.set_dur_clock(clock_of_compute);
-      event1.set_row_idx(j);
-      q.pushEvent(i, event1);
+//      if (none_zero != 0) {
+        event::Event event1;
+        event1.set_type(event::PE_VMS);
+        event1.set_clock(0);
+        event1.set_dur_clock(clock_of_compute);
+        event1.set_row_idx(j);
+        q.pushEvent(i, event1);
+//      }
     }
   }
   q.updateClock();
 }
+
+void passEventN2S(EventQueue& q, int pe_idx);
 
 } // namespace simu
 

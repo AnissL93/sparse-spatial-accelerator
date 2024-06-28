@@ -27,9 +27,7 @@ enum class FillMethod {
   Blocked
 };
 
-
-template <typename T>
-unsigned getNumOfNoneZero(taco::Tensor<T> x ) {
+template <typename T> unsigned getNumOfNoneZero(taco::Tensor<T> x) {
   unsigned ret = 0;
   assert(x.getOrder() == 2 && "only support matrix!");
   int m = x.getDimension(0);
@@ -37,7 +35,7 @@ unsigned getNumOfNoneZero(taco::Tensor<T> x ) {
   for (int i = 0; i < m; ++i) {
     for (int j = 0; j < n; ++j) {
       if (x.at({i, j}) != 0) {
-        ret ++;
+        ret++;
       }
     }
   }
@@ -65,15 +63,15 @@ template <typename T> void printMatrix(taco::Tensor<T> x) {
   assert(x.getOrder() == 2 && "only support matrix!");
   int m = x.getDimension(0);
   int n = x.getDimension(1);
-  std::cout << "==== " << x.getName() << " [" << m << ", " << n << "] ===" <<
-      getNumOfNoneZero(x) << "/" << m*n << std::endl;
+  std::cout << "==== " << x.getName() << " [" << m << ", " << n
+            << "] ===" << getNumOfNoneZero(x) << "/" << m * n << std::endl;
 
   int width = 10;
   int precision = 4;
-  std::cout << std::fixed; // Use fixed-point notation
+  std::cout << std::fixed;                   // Use fixed-point notation
   std::cout << std::setprecision(precision); // Set precision
 
-  for (int i = 0; i < m+1; ++i) {
+  for (int i = 0; i < n + 1; ++i) {
     if (i == 0) {
       std::cout << std::setw(width) << " ";
     } else {
@@ -81,7 +79,7 @@ template <typename T> void printMatrix(taco::Tensor<T> x) {
     }
   }
   std::cout << std::endl;
-  std::cout << std::string(width * (m+1), '-') << std::endl;
+  std::cout << std::string(width * (n + 1), '-') << std::endl;
 
   for (int i = 0; i < m; ++i) {
     std::cout << std::setw(width) << i;
@@ -92,8 +90,8 @@ template <typename T> void printMatrix(taco::Tensor<T> x) {
   }
 }
 
-template<typename >
-void generateSparseMatrix(taco::TensorBase& tens, double density);
+template <typename>
+void generateSparseMatrix(taco::TensorBase &tens, double density);
 
 template <typename T>
 void fillRandom(taco::TensorBase &tens, const FillMethod &fill,
@@ -111,7 +109,7 @@ void fillRandom(taco::TensorBase &tens, const FillMethod &fill,
   const FillMethod blockFillMethod = FillMethod::FEM;
 
   std::uniform_real_distribution<float> unif(doubleLowerBound,
-                                              doubleUpperBound);
+                                             doubleUpperBound);
   std::default_random_engine re;
   re.seed(std::random_device{}());
   std::vector<int> tensorSize = tens.getDimensions();
@@ -236,8 +234,6 @@ template <typename T> size_t getByteSize(taco::Tensor<T> x) {
       std::accumulate(x.getDimensions().begin(), x.getDimensions().end(), 1);
   return size * sizeof(T);
 }
-
-
 
 } // namespace simu
 

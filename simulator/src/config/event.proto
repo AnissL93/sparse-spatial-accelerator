@@ -32,6 +32,7 @@ enum EventType {
   PE_ST = 1;
   PE_LD = 2;
   PASS = 3;
+  PE_ACC = 4;
 }
 
 message Event {

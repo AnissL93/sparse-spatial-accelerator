@@ -16,8 +16,8 @@ class TestTask : public testing::Test {
 protected:
 
   void SetUp() override {
-    spmm = Task<float>::makeSPMM(20, 20, 20, 0.2, "spmm0");
-    spmm.setTileSize(1, 5, 4);
+    spmm = Task<float>::makeSPMM(5, 20, 100, 0.3, "spmm0");
+    spmm.setTileSize(1, 20, 25);
 
     sddm = Task<int>::makeSDDM(10, 8, 4, 0.2, "sddm0");
   }
@@ -31,7 +31,6 @@ protected:
 };
 
 TEST(event, basic) {
-  LOG(INFO) << "this is a test";
 
   EventQueue queue(3);
 

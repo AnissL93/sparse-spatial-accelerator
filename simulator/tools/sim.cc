@@ -24,10 +24,7 @@ DEFINE_string(dtype, "float", "Datatype of the matrix multiplication: float, "
 
 int main(int argc, char **argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-
-  double density = sqrt(FLAGS_density);
-  density = FLAGS_density;
-
+  double density = FLAGS_density;
   if (FLAGS_algo == "spmm") {
     if (FLAGS_dtype == "float") {
       auto task = simu::Task<float>::makeSPMM(FLAGS_m, FLAGS_n, FLAGS_k,
@@ -45,10 +42,8 @@ int main(int argc, char **argv) {
     }
   } else if (FLAGS_algo == "sddm") {
     LOG(FATAL) << "not support";
-
   } else if (FLAGS_algo == "diag") {
     LOG(FATAL) << "not support";
   }
-
   return 0;
 }
